@@ -1,0 +1,21 @@
+# Please keep categories in this file sorted alphabetically, list
+# folder ignores before file ignores and keep all ignores sorted
+# alphabetically per category and type (folder/file). Please suffix
+# directory names with "/" to make it clear that it is a directory.
+
+# Do not add files created by your IDE or operating system to this
+# .gitignore. Use a personal .gitignore file instead.
+
+# Composer
+vendor/
+composer.lock
+
+# Infection
+coverage/
+
+# PHPStan
+phpstan.neon
+
+# PHPUnit
+.phpunit.result.cache
+

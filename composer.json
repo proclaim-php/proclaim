@@ -1,0 +1,32 @@
+{
+    "name": "proclaim/proclaim",
+    "description": "A property based testing library for PHP inspired by Haskell's QuickCheck",
+    "type": "library",
+    "license": "GPL-3.0-only",
+    "autoload": {
+        "psr-4": {
+            "Proclaim\\Proclaim\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Marijn van Wezel",
+            "email": "marijnvanwezel@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "~8.1.0 || ~8.2.0",
+        "infection/infection": "^0.26.19"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.9",
+        "phpstan/phpstan-strict-rules": "^1.4",
+        "friendsofphp/php-cs-fixer": "^3.14"
+    },
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    }
+}
