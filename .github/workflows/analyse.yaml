@@ -34,4 +34,33 @@ jobs:
               run: composer install --no-interaction --prefer-dist --no-progress
 
             - name: Execute type checking
-              run: php vendor/bin/phpstan
+              run: php vendor/bin/phpstan analyse --error-format=github
+
+    mess-detection:
+        name: "Mess detection (PHP ${{ matrix.php-version }})"
+        runs-on: "ubuntu-22.04"
+        continue-on-error: true
+
+        strategy:
+            matrix:
+                php-version: [ "8.1" ]
+
+        env:
+            COMPOSER_VERSION: 2
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v3
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-version }}
+                    coverage: none
+                    tools: composer:${{ env.COMPOSER_VERSION }}
+
+            -   name: Install dependencies
+                run: composer install --no-interaction --prefer-dist --no-progress
+
+            -   name: Execute type checking
+                run: php vendor/bin/phpmd src/ github phpmd.dist.xml

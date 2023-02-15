@@ -12,6 +12,7 @@ composer.lock
 
 # Infection
 coverage/
+infection.log
 
 # PHPStan
 phpstan.neon

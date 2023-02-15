@@ -17,12 +17,14 @@
     "minimum-stability": "stable",
     "require": {
         "php": "~8.1.0 || ~8.2.0",
-        "infection/infection": "^0.26.19"
+        "infection/infection": "^0.26.19",
+        "phpunit/phpunit": "^10.0"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.9",
         "phpstan/phpstan-strict-rules": "^1.4",
-        "friendsofphp/php-cs-fixer": "^3.14"
+        "friendsofphp/php-cs-fixer": "^3.14",
+        "phpmd/phpmd": "^2.13"
     },
     "config": {
         "allow-plugins": {
