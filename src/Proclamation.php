@@ -9,7 +9,20 @@
  */
 namespace Proclaim;
 
-use AssertionError;
+use Proclaim\Arbitrary\Arbitrary;
+use Proclaim\Result\Failure;
+use Proclaim\Result\Falsified;
+use Proclaim\Result\Success;
+
+/**
+ * Creates a new proclamation for the given property.
+ *
+ * @param callable(mixed...): bool $property The property to test.
+ */
+function proclaim(callable $property): Proclamation
+{
+    return new Proclamation($property);
+}
 
 /**
  * A class that wraps a property so that it can be tested, and provides a number
@@ -23,13 +36,23 @@ class Proclamation
     /**
      * @var callable(mixed...): bool The property to test.
      */
-    private $property;
+    private readonly mixed $property;
+
+    /**
+     * @var array<string, class-string<Arbitrary>> The arbitrary classes to use.
+     */
+    private array $arbitraries;
 
     /**
      * @var positive-int A number greater than zero specifying the maximum number
-     *                   of tests to perform.
+     *                   of successful tests.
      */
-    private int $maxNumTests = 100;
+    private int $maxSuccessTests = 100;
+
+    /**
+     * @var int<0, max> The number of successful tests that have been performed.
+     */
+    private int $numSuccessTests = 0;
 
     /**
      * @param callable(mixed...): bool $property The property to check.
@@ -40,25 +63,55 @@ class Proclamation
     }
 
     /**
-     * Configures the maximum number of tests to perform.
+     * Configures the maximum number of successful tests.
      *
-     * @param positive-int $maxNumTests The maximum number of tests to perform.
+     * @param positive-int $maxSuccessTests The maximum number of successful tests.
      * @return $this
      */
-    public function withMaxTests(int $maxNumTests): self
+    public function withMaxSuccess(int $maxSuccessTests): self
     {
-        $this->maxNumTests = $maxNumTests;
+        $this->maxSuccessTests = $maxSuccessTests;
 
         return $this;
     }
 
     /**
-     * Test the property and print the results to `stdout`.
+     * Adds the given arbitrary classes.
      *
-     * @return void
+     * @param array<string, class-string<Arbitrary>> $arbitraries The arbitrary classes to add.
+     * @return $this
      */
-    public function print(): void
+    public function withArbitraries(array $arbitraries): self
+    {
+        $this->arbitraries = array_merge($this->arbitraries, $arbitraries);
+
+        return $this;
+    }
+
+    /**
+     * Test the property and return the result. By default, up to 100 tests
+     * are performed. This may not be enough to find all bugs, especially if
+     * your property has many inputs. You can use `Proclamation::withMaxSuccess()`
+     * to set the maximum number of successful tests.
+     *
+     * This method will return a Failure object if an exception was thrown or a
+     * failure condition was met during testing, a Falsified object if a counter-example
+     * for the property was found, or a Success object if no counter-example was found.
+     *
+     * @return Failure|Falsified|Success
+     */
+    public function test(): Failure|Falsified|Success
     {
 
+    }
+
+    /**
+     * Allow this class to be invoked directly. This serves as sugar to calling the
+     * `test` method explicitly.
+     *
+     * @return Failure|Falsified|Success
+     */
+    public function __invoke(): Failure|Falsified|Success {
+        return $this->test();
     }
 }
